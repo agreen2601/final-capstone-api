@@ -20,7 +20,7 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
             view_name='location',
             lookup_field='id'
         )
-        fields = ('id', 'name', 'route_id')
+        fields = ('id', 'name', 'route_id', 'route')
         depth = 1
 
 
