@@ -69,6 +69,11 @@ class Entries(ViewSet):
         if route_id is not None:
             entries = entries.filter(route_id=route_id)
 
+        # handles fetching list of all entries from a certain event
+        event_id = self.request.query_params.get('eventID', None)
+        if event_id is not None:
+            entries = entries.filter(event_id=event_id)
+
         serializer = EntrySerializer(
             entries, many=True, context={"request": request})
         return Response(serializer.data)
