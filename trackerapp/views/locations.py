@@ -1,5 +1,5 @@
 '''
-A django page to handle all entries fetch calls
+A django page to handle all locations fetch calls
 
 '''
 from django.http import HttpResponseServerError

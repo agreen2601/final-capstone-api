@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'trackerapp',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
+    'trackerapp',
 ]
 
 REST_FRAMEWORK = {
