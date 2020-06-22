@@ -2,14 +2,14 @@
 A django page to handle all entries fetch calls
 
 '''
-from django.http import HttpResponseServerError
+from django.http import HttpResponse
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
+from django.db import models
 from trackerapp.models import Entry, Event, Location, Route
 from django.contrib.auth.models import User
-from django.http import HttpResponse
 import json
 from datetime import datetime
 
@@ -23,7 +23,7 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'date', 'time', 'attendee_count', 'vehicle_number',
-                  'event_id', 'location_id', 'route_id', 'user_id', 'location', 'event')
+                  'event_id', 'location_id', 'route_id', 'user_id', 'location', 'event', 'user')
         depth = 2
 
 
@@ -38,16 +38,15 @@ class Entries(ViewSet):
         ''' Handle POST operations and returns JSON serialized product instance'''
 
         newentry = Entry()
-        newentry.date = datetime.now().strftime("%Y-%m-%d")
-        newentry.time = datetime.now().strftime("%H:%M")
+        newentry.date = request.data["date"]
+        newentry.time = request.data["time"]
         newentry.attendee_count = request.data["attendee_count"]
         newentry.vehicle_number = request.data["vehicle_number"]
         newentry.event_id = request.data["event_id"]
         newentry.location_id = request.data["location_id"]
         newentry.route_id = request.data["route_id"]
-        # newuser = User.objects.get(user=request.auth.user)
-        # newentry.user = newuser
-        newentry.user_id = request.data["user_id"]
+        newuser = request.auth.user
+        newentry.user = newuser
         newentry.save()
 
         serializer = EntrySerializer(
@@ -74,6 +73,11 @@ class Entries(ViewSet):
         if event_id is not None:
             entries = entries.filter(event_id=event_id)
 
+        # handles fetching list of all entries from a certain user
+        user_id = self.request.query_params.get('userID', None)
+        if user_id is not None:
+            entries = entries.filter(user_id=user_id)
+
         serializer = EntrySerializer(
             entries, many=True, context={"request": request})
         return Response(serializer.data)
@@ -93,12 +97,11 @@ class Entries(ViewSet):
         ogEntry = Entry.objects.get(pk=pk)
         ogEntry.attendee_count = request.data['attendee_count']
         ogEntry.vehicle_number = request.data['vehicle_number']
-
         ogEntry.save()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk=None):
-        '''handles delete product'''
+        '''handles delete entry'''
         try:
             entry = Entry.objects.get(pk=pk)
             entry.delete()
