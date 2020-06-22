@@ -28,9 +28,13 @@ router.register(r'entries', Entries, 'entry')
 router.register(r'events', Events, 'event')
 router.register(r'locations', Locations, 'location')
 router.register(r'routes', Routes, 'route')
-
+router.register(r'users', Users, 'user')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    path('register/', register_user),
+    path('login/', login_user),
+    path('get_user/', get_user),
+    path('api-token-auth/', obtain_auth_token),
 ]

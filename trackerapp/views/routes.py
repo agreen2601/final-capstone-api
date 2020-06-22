@@ -1,5 +1,5 @@
 '''
-A django page to handle all entries fetch calls
+A django page to handle all routes fetch calls
 
 '''
 from django.http import HttpResponseServerError
@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from trackerapp.models import Route
-from django.contrib.auth.models import User
 from django.http import HttpResponse
 import json
 
