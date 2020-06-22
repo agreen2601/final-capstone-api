@@ -97,6 +97,9 @@ class Entries(ViewSet):
         ogEntry = Entry.objects.get(pk=pk)
         ogEntry.attendee_count = request.data['attendee_count']
         ogEntry.vehicle_number = request.data['vehicle_number']
+        ogEntry.date = request.data['date']
+        ogEntry.time = request.data['time']
+
         ogEntry.save()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
