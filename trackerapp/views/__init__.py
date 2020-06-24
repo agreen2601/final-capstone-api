@@ -1,6 +1,6 @@
 from .entries import Entries
 from .events import Events
-from .locations import Locations
+from .locations import Places
 from .routes import Routes
 from .users import Users
 from .register import register_user

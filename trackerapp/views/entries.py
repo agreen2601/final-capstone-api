@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from django.db import models
-from trackerapp.models import Entry, Event, Location, Route
+from trackerapp.models import Entry, Event, Place
 from django.contrib.auth.models import User
 import json
 from datetime import datetime
@@ -23,7 +23,7 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'date', 'time', 'attendee_count', 'vehicle_number',
-                  'event_id', 'location_id', 'route_id', 'user_id', 'location', 'event', 'user')
+                  'event_id', 'place_id', 'user_id', 'place', 'event', 'user')
         depth = 2
 
 
@@ -43,8 +43,7 @@ class Entries(ViewSet):
         newentry.attendee_count = request.data["attendee_count"]
         newentry.vehicle_number = request.data["vehicle_number"]
         newentry.event_id = request.data["event_id"]
-        newentry.location_id = request.data["location_id"]
-        newentry.route_id = request.data["route_id"]
+        newentry.place_id = request.data["place_id"]
         newuser = request.auth.user
         newentry.user = newuser
         newentry.save()
@@ -58,15 +57,10 @@ class Entries(ViewSet):
         ''' handles get requests to server and returns a JSON response'''
         entries = Entry.objects.all()
 
-        # handles fetching list of all entries from a certain location
-        location_id = self.request.query_params.get('locationID', None)
-        if location_id is not None:
-            entries = entries.filter(location_id=location_id)
-
-        # handles fetching list of all entries from a certain route
-        route_id = self.request.query_params.get('routeID', None)
-        if route_id is not None:
-            entries = entries.filter(route_id=route_id)
+        # handles fetching list of all entries from a certain place
+        place_id = self.request.query_params.get('placeID', None)
+        if place_id is not None:
+            entries = entries.filter(place_id=place_id)
 
         # handles fetching list of all entries from a certain event
         event_id = self.request.query_params.get('eventID', None)
@@ -95,6 +89,9 @@ class Entries(ViewSet):
     def update(self, request, pk=None):
 
         ogEntry = Entry.objects.get(pk=pk)
+        ogEntry.event_id = request.data['event_id']
+        ogEntry.place_id = request.data['place_id']
+        # ogEntry.route_id = request.data['route_id']
         ogEntry.attendee_count = request.data['attendee_count']
         ogEntry.vehicle_number = request.data['vehicle_number']
         ogEntry.date = request.data['date']

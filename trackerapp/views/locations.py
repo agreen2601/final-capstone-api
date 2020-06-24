@@ -1,5 +1,5 @@
 '''
-A django page to handle all locations fetch calls
+A django page to handle all places fetch calls
 
 '''
 from django.http import HttpResponseServerError
@@ -7,44 +7,44 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from trackerapp.models import Location
+from trackerapp.models import Place
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 import json
 
 
-class LocationSerializer(serializers.HyperlinkedModelSerializer):
+class PlaceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Location
+        model = Place
         url = serializers.HyperlinkedIdentityField(
-            view_name='location',
+            view_name='place',
             lookup_field='id'
         )
         fields = ('id', 'name', 'route_id', 'route')
         depth = 1
 
 
-class Locations(ViewSet):
+class Places(ViewSet):
 
-    '''' a class to handle all the locations viewset
+    '''' a class to handle all the places viewset
 
     Arguments:
         ViewSet '''
 
     def list(self, request):
         ''' handles get requests to server and returns a JSON response'''
-        locations = Location.objects.all()
+        places = Place.objects.all()
 
-        serializer = LocationSerializer(
-            locations, many=True, context={"request": request})
+        serializer = PlaceSerializer(
+            places, many=True, context={"request": request})
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        '''handles fetching ony one location'''
+        '''handles fetching ony one place'''
         try:
-            location = Location.objects.get(pk=pk)
-            serializer = LocationSerializer(
-                location, many=False, context={'request': request})
+            place = Place.objects.get(pk=pk)
+            serializer = PlaceSerializer(
+                place, many=False, context={'request': request})
             return Response(serializer.data)
         except Exception:
             return HttpResponse(json.dumps({"error": "Does Not Exist"}), content_type="application/json")

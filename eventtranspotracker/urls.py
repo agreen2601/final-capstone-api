@@ -26,7 +26,7 @@ from django.conf.urls.static import static
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'entries', Entries, 'entry')
 router.register(r'events', Events, 'event')
-router.register(r'locations', Locations, 'location')
+router.register(r'places', Places, 'place')
 router.register(r'routes', Routes, 'route')
 router.register(r'users', Users, 'user')
 

@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from .route import Route
-from .location import Location
+from .location import Place
 from .event import Event
 from django.contrib.auth.models import User
 
@@ -12,8 +12,7 @@ class Entry(models.Model):
     time = models.TimeField()
     attendee_count = models.IntegerField()
     vehicle_number = models.CharField(max_length=50)
-    route = models.ForeignKey(Route, on_delete=models.DO_NOTHING)
-    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
+    place = models.ForeignKey(Place, on_delete=models.DO_NOTHING)
     event = models.ForeignKey(Event, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
