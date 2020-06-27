@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from trackerapp.models import Place
-from django.contrib.auth.models import User
 from django.http import HttpResponse
 import json
 

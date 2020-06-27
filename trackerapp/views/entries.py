@@ -91,7 +91,6 @@ class Entries(ViewSet):
         ogEntry = Entry.objects.get(pk=pk)
         ogEntry.event_id = request.data['event_id']
         ogEntry.place_id = request.data['place_id']
-        # ogEntry.route_id = request.data['route_id']
         ogEntry.attendee_count = request.data['attendee_count']
         ogEntry.vehicle_number = request.data['vehicle_number']
         ogEntry.date = request.data['date']

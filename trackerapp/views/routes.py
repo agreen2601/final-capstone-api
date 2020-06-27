@@ -20,7 +20,7 @@ class RouteSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'name', 'color', 'description')
-        depth = 1
+        # depth = 1
 
 
 class Routes(ViewSet):
@@ -39,11 +39,11 @@ class Routes(ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        '''handles fetching ony one Route'''
+        '''handles fetching only one route'''
         try:
             route = Route.objects.get(pk=pk)
             serializer = RouteSerializer(
-                Route, many=False, context={'request': request})
+                route, many=False, context={'request': request})
             return Response(serializer.data)
         except Exception:
             return HttpResponse(json.dumps({"error": "Does Not Exist"}), content_type="application/json")
